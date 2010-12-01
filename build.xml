@@ -1,0 +1,180 @@
+<!-- 
+	Build file for installing Apache-tomcat-6 and GridSphere 3.2 Portal
+	Uwe Kronholm, AEI Potsdam, 25-09-09.
+-->
+
+<project name="Tomcat and GridSphere Portal installer" default="help" basedir=".">
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+                <classpath>
+                        <pathelement location="src/ant-contrib-0.3.jar" />
+                </classpath>
+        </taskdef>
+	
+	<property file="build.properties"/>
+	<property environment="env"/>
+
+	<target name="title">
+		<echo message="****************** Tomcat and GridSphere Portal installer *********************" />
+	</target>
+
+	<target name="help" depends="title">
+		<echo message="   install               install the Apache Tomcat and GridSphere portal" />
+		<echo message="   install_x509          install Tomcat and GridSphere with X509 support"/>
+		<echo message="   check-envs            checks if the environment variables are set" />
+		<echo message="   deep-clean            removes the install dir and the gridsphere settings dir. This includes the ~/.gridsphere dir [BEWARE]" />
+		<echo message="   start/stop            starts or stops tomcat" />
+	</target>
+
+	<target name="check-envs">
+		<!-- Install dir for Tomcat -->
+		<echo message="Install dir = ${install.dir}"/>
+		<echo message=""/>				
+		
+		<!-- Checking if CATALIAN_HOME is set and correct -->
+		<fail message="Environment variable CATALINA_HOME NOT SET. Please set CATALINA_HOME to ${install.tomcat.dir}" unless="env.CATALINA_HOME" />
+    	<if>
+        	<not>
+            	<equals arg1="${install.tomcat.dir}" arg2="${env.CATALINA_HOME}" />
+            </not>
+        <then>
+        	<fail message="CATALINA_HOME points to a different location. Is: CATALINA_HOME=${env.CATALINA_HOME}   Should be: ${install.tomcat.dir}   Please correct the environment variable." />
+            </then>
+       	</if>
+		<echo message="Using CATALINA_HOME = ${env.CATALINA_HOME}"/>
+		<echo message=""/>
+		
+		<!-- Checking if ANT_HOME is set -->		
+		<fail message="environment variable ANT_HOME is missing, please set up ANT_HOME">
+			<condition>
+				<not>
+					<isset property="env.ANT_HOME"/>
+				</not>
+			</condition>
+		</fail>
+		<echo message="Using ANT_HOME = ${env.ANT_HOME}"/>
+		<echo message=""/>
+		
+		<!-- Checking Java version -->
+		<fail message="THIS INSTALL REQUIERES JAVA 1.6. You are using ${ant.java.version}.">
+			<condition>
+				<not>
+					<equals arg1="${ant.java.version}" arg2="1.6" />
+				</not>
+			</condition>
+		</fail>
+		<!--<exec executable="java">
+			<arg value="-version"/>
+		</exec>-->
+		<echo message="You are using Java version ${ant.java.version}"/>
+		<echo message="Using JAVA_HOME = ${env.JAVA_HOME}"/>
+	</target>
+
+	
+	<!-- target to install tomcat -->
+	<target name="install-tomcat">
+		<!-- install apache tomcat webserver in directory $CATALINA_HOME -->
+		<mkdir dir="${install.dir}" />
+		<!-- unpack Tomcat dirs -->
+		<untar src="${tomcat.file}" dest="${install.dir}" compression="gzip" />
+		<!-- chmod for usefull *.sh scripts -->
+		<exec executable="chmod" dir="${env.CATALINA_HOME}/bin">
+			<arg value="-v"/>
+			<arg line="+x startup.sh shutdown.sh catalina.sh digest.sh setclasspath.sh tool-wrapper.sh version.sh" />
+		</exec>
+	</target>
+	
+	<!-- target to install gridsphere -->
+	<target name="install-gridsphere" >
+		<!-- unpack GridSphere src -->
+		<untar src="${gridsphere.file}" dest="${install.dir}" compression="gzip" />
+		<!-- install GridSphere --> 
+		<ant dir="${gridsphere.unpack.dir}" target="install" /> 
+	</target>
+	
+	<target name="update-tomcat-https">
+		<!-- setting values in server.xml for using X509 certificates -->
+		<replace file="${env.CATALINA_HOME}/conf/server.xml">
+			<replacefilter token="${tomcat.conf.old}" value="${tomcat.conf.new}" />   
+			<replacefilter token="8005" value="${tomcat.conf.port.shutdown}" />
+			<replacefilter token="8080" value="${tomcat.conf.port.http}" />
+			<replacefilter token="8443" value="${tomcat.conf.port.https}" />
+		</replace>		
+		<!-- increase security: rename tomcat-users.xml -->
+		<move file="${tomcat.users.file}" tofile="${tomcat.users.example.file}" /> 
+	</target>
+	
+
+	<target name="update-tomcat-http">
+		<!-- setting ports in server.xml -->
+		<replace file="${env.CATALINA_HOME}/conf/server.xml">
+			<replacefilter token="8005" value="${tomcat.conf.port.shutdown}" />
+			<replacefilter token="8080" value="${tomcat.conf.port.http}" />
+			<replacefilter token="8443" value="${tomcat.conf.port.https}" />
+		</replace>		
+		<!-- increase security: rename tomcat-users.xml -->
+		<move file="${tomcat.users.file}" tofile="${tomcat.users.example.file}" />
+	</target>
+
+
+
+	<target name="install" depends="check-envs">              
+		<antcall target="install-tomcat"/>
+		<antcall target="install-gridsphere"/>
+		<antcall target="update-tomcat-http"/>
+		<echo message="Waiting for Gridsphere initial setup"/>
+		<antcall target="start"/>
+		<sleep seconds="10" />
+		<antcall target="stop"/>
+		<antcall target="start"/>
+
+		<echo message="***************************************************" />
+		<echo message="  Apache Tomcat ${apache.tomcat.version} and Gridsphere portal 3.2 install complete: " />
+		<echo message="  secure port   -> ${gridsphere.https}" />
+		<echo message="  insecure port -> ${gridsphere.http}" />
+		<echo message="***************************************************" />
+	</target>
+
+
+	<target name="install_x509" depends="check-envs">              
+		<antcall target="install-tomcat"/>
+		<antcall target="install-gridsphere"/>
+		<antcall target="update-tomcat-https"/>
+		<copy file="GridCAs" tofile="${user.home}/.GridCAs"/>
+		<echo message="Waiting for Gridsphere initial setup"/>
+		
+		<antcall target="start"/>
+		<sleep seconds="10" />
+		<antcall target="stop"/>
+		<antcall target="start"/>
+
+		<echo message="***************************************************" />
+		<echo message="  Apache Tomcat ${apache.tomcat.version} and Gridsphere portal 3.2 install complete: " />
+		<echo message="  secure port   -> ${gridsphere.https}" />
+		<echo message="  insecure port -> ${gridsphere.http}" />
+		<echo message="***************************************************" />
+	</target>
+
+	<!-- made these cause I am lazy -->
+	<target name="stop" depends="check-envs">
+		<exec executable="${env.CATALINA_HOME}/bin/shutdown.sh"/>
+	</target>
+
+	<target name="start" depends="check-envs">
+		<exec executable="${env.CATALINA_HOME}/bin/startup.sh"/>
+	</target>
+
+	<target name="deep-clean" depends="check-envs">
+		<exec executable="rm">
+			<arg value="-rf" />
+			<arg value="${install.dir}" />
+		</exec>
+		<exec executable="rm">
+			<arg value="-rf" />
+			<arg value="${env.HOME}/.gridsphere" />
+		</exec>
+		<echo message="Deleted directory srv and .gridsphere"/>
+	</target>
+
+</project>
+

@@ -1,0 +1,95 @@
+# **********************************************************************
+# Installing Tomcat and GridSphere 3.2
+# **********************************************************************
+
+
+ Requirements
+------------------------------------------------------------------------
+- JDK 1.6+
+- Ant 1.6+
+- environment variables:
+  - JAVA_HOME 
+  - ANT_HOME 
+  - CATALINA_HOME should point to the tomcat directory
+
+  The install dir for Tomcat and GridSphere is set in the build.properties
+  e.g. if you set 
+
+  install.dir=$HOME/srv
+
+  then GridSphere will be installed in
+
+  $HOME/srv/GRIDSPHERE_3_2
+
+  and the Tomcat in
+ 
+  $HOME/srv/apache-tomcat-6.0.20
+
+  Run ant check-envs to check the settings of JAVA_HOME,
+  ANT_HOME, and CATALINA_HOME. 
+  
+  It is possible to change thes settings of install.dir within build.properties.
+
+
+ Installation
+------------------------------------------------------------------------
+- First supply the absolute path to where you want the install to happen.
+  This is done in build.properties:
+  e.g. install.dir=$HOME/srv
+
+- If you don't want to use Single-Sign-On with X.509 certificates just run
+  	ant install
+
+- If you want to use Single-Sign-On with X.509 certificates just run
+	ant install_x509 
+  
+  To do that you need:
+	- a user certificate in your browser
+
+	- a host certificate in .p12 format
+	  Just rename it to .keystore and put it in $HOME.
+	  Supply the password for exporting the host certificate 
+          out of the Web browser you have used for ordering your certificate
+          to tomcat.keystore.password in build.properties
+
+	- a keystore with the trusted CA's
+  	  This bundle comes with a keystore for the trusted CA's.
+	  You find it in the file in $HOME/.GridCAs. The password is 'gridsphere'. 
+	  You can change the password with:
+	  keytool -storepasswd -new new_storepass -keystore .GridCAs
+	  Don't forget to change it in build.properties (trustedCAs.pass).
+	  You can add an other CA with:
+	  keytool -import -trustcacerts -file <path to ca.pem> -alias CA_ALIAS -keystore .GridCAs
+
+  After the install go to http://server:port/gridsphere/gridsphere to create the gridsphere DB and
+  the GridSphere Admin. 
+  Login as the GridSphere Admin and activate under Administration - Configuration - Login Configuration
+  the checkbox 'Support client X.509 certificate authentication?'.
+  The only thing missing is Gridsphere having a map from the client cert given to it from Tomcat to a user 
+  in the Gridsphere data base. When you try to log in to Gridsphere on the secure port, default is 8443, you are 
+  prompted witha dialog like:
+  	Login with certificate
+	CN=Max Muster, OU=Uni, O=GermanGrid, C=DE
+  This string needs to be entered into the users profile in Gridsphere in the textfield 'Certificate'. But not as it appears  here. It must be reversed and replace ", " with "/" like this:
+	/C=DE/O=GermanGrid/OU=Max Muster/CN=Max Muster
+  Sorry for this bug, we are going to fix it.
+
+- You can change if you want:
+  	- tomcat.conf.port.shutdown (the port to shutdown the tomcat server, default: 8005)
+  	- tomcat.conf.port.http (the port for http connections, default: 8080)
+  	- tomcat.conf.port.https (the port for https connections, default: 8443)
+  
+
+ Hints
+------------------------------------------------------------------------
+- start the Tomcat web server
+  ant start
+
+- shutdown the Tomcat web server
+  ant stop
+
+- Web Server log file
+  $CATALINA_HOME/logs/catalina.out
+
+- to delete everything (install dir with tomcat and gridsphere and $HOME/.gridsphere)
+  ant deep-clean
