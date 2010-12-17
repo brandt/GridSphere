@@ -19,23 +19,17 @@ public class ShibbolethAuthModule extends BaseAuthModule implements LoginAuthMod
 		
 	public ShibbolethAuthModule(AuthModuleDefinition moduleDef) {
 		super(moduleDef);
-		//		 Get instance of password manager service
+		// Get instance of password manager service
         try {
             this.passwordManager = (PasswordManagerService) PortletServiceFactory.createPortletService(PasswordManagerService.class, true);
         } catch (Exception e) {
             log.error("Unable to get instance of password manager service!", e);
         }
-		log.debug("\n\n>>>>>   In ShibbolethAuthModule \n\n");
-	}
+			}
 
-	/**
-	 * Kommt vom Interface LoginAuthModule
-	 * Wird ueberschrieben damit ein Login mit einem beliebigen password nicht moeglich ist
-	 * 
-	 */
+	
 	public void checkAuthentication(User user, String password) throws AuthenticationException {
-			log.debug("\n\n>>>>>>>>>>        In checkAuthentication\n\n");
-//			 Check that password is not null
+			// Check that password is not null
 	        if (password == null) {
 	            log.debug("Password is not provided.");
 	            throw new AuthenticationException("key1");

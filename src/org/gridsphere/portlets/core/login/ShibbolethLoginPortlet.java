@@ -43,6 +43,7 @@ import org.gridsphere.services.core.shibboleth.ShibbolethUser;
 import org.gridsphere.services.core.shibboleth.ShibbolethUserService;
 import org.gridsphere.services.core.user.User;
 import org.gridsphere.services.core.user.UserManagerService;
+import org.gridsphere.portlets.util.ShibbolethProperties;
 
 public class ShibbolethLoginPortlet extends ActionPortlet {
 	
@@ -96,8 +97,7 @@ public class ShibbolethLoginPortlet extends ActionPortlet {
 		
 		List modules = authModuleService.getActiveAuthModules();
 		Iterator it = modules.iterator();
-		//boolean success = false;
-		
+				
 		RenderResponse response = event.getRenderResponse();
 		
 		if (redirectURL == null) {
@@ -111,6 +111,7 @@ public class ShibbolethLoginPortlet extends ActionPortlet {
 			LoginAuthModule module = (LoginAuthModule) it.next();
 			if ( (module != null) && module.getModuleName().equals("Shibboleth Authentication") ) {
 				request.setAttribute("shibboleth.login.enabled", "true");
+				request.setAttribute("shibboleth.sp", ShibbolethProperties.getInstance().getProperty("host.dns"));
 				break;
 			}
 		}
@@ -127,75 +128,33 @@ public class ShibbolethLoginPortlet extends ActionPortlet {
 	
 		
 	/*
-	 * obtainSAMLAttributes(ActionFormEvent event) wird von "shibbolethLogin.jsp" aufgerufen. 
-	 * Mit setNextState wird "obtainSAMLAttributes.jsp" aufgerufen
+	 * obtainSAMLAttributes(ActionFormEvent event) is called from "shibbolethLogin.jsp". 
 	 * 
 	 */
 	public void obtainSAMLAttributes(ActionFormEvent event) throws PortletException {
-		log.debug("\n\n\n\n >>>>>>>>>>>>> in ShibbolethLoginPortlet : obtainSAMLAttributes("+event+") <<<<<<<<<<<<<<<<<<<<<<<<<<< \n\n\n");
-				
 		PortletRequest req = event.getActionRequest();
-			
 		setNextState(req, "login/obtainSAMLAttributes.jsp");
 	
 	}
 	
 	
 	/*
-	 *  gs_login(ActionFormEvent event) wird von ....  aufgerufen
-	 *  Prueft ob in der PortletSession das Attribute "shibboleth.user.username" gesetzt ist (Wird in GridSphereFilter von
-	 *  getSAMLAttributes gesetzt). 
-	 *  Wenn ja, wird login(PortletRequest request) aufgerufen, sonst mit setNextState "loginFromShibboleth.jsp"
+	 *  gs_login(ActionFormEvent event) 
 	 * 
 	 */
 	public void gs_login(ActionFormEvent event) throws PortletException {
 		log.debug(">>>>>>>>>>>>>  in ShibbolethLoginPortlet : gs_login");
 		ActionRequest req = event.getActionRequest();
 		HttpServletRequest request = (HttpServletRequest) req;
-		
-		/*String shib_flag = (String) req.getPortletSession(true).getAttribute("shibboleth.user.username");
 				
-		log.debug(">>>>>>>>>>>>>>-------------<<<<<<<<<<<< in gs_login shibboleth.user.username = " + shib_flag);
-		if ( shib_flag != null) {
-			log.debug("\n\n\n\n >>>>>>>>>>>>>>>>>>>>>>> IM IF shibboleth.use.username != null <<<<<<<<<<<<<<<<<<<<<<< \n\n\n\n");
-				
-			try {
-	            log.debug("##########>>>>>>>>>> in LoginPortlet gs_login Aufruf von login(ActionFormEvent event), event = " + event);
-	        	login(event);
-	        } catch (AuthorizationException err) {
-	        	log.debug("shibboleth.user.somevalue = " + request.getSession(true).getAttribute("shibboleth.user.somevalue"));
-	        	request.getSession(true).removeAttribute("shibboleth.user.somevalue");
-	        	log.debug("shibboleth.user.somevalue = " + request.getSession(true).getAttribute("shibboleth.user.somevalue"));
-	        	log.debug(err.getMessage());
-	            req.getPortletSession(true).setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
-	            err.printStackTrace();
-	        } catch (AuthenticationException err) {
-	            log.debug(err.getMessage());
-	            req.getPortletSession(true).setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
-	            err.printStackTrace();
-	        }
-		}	
-		else {
-			//req.setAttribute("shibboleth.login.redirect", "false");
-			//setNextState(req, DEFAULT_VIEW_PAGE);
-			setNextState(req, "login/shibbolethLogin.jsp");
-			//setNextState(req, "login/loginFromShibboleth.jsp");
-		}*/
-		//req.getPortletSession(true).removeAttribute("shibboleth.account.disabled");
-		
 		try {
             log.debug("##########>>>>>>>>>> in LoginPortlet gs_login Aufruf von login(ActionFormEvent event), event = " + event);
         	login(event);
         } catch (AuthorizationException err) {
         	log.debug("shibboleth.user.somevalue = " + request.getSession(true).getAttribute("shibboleth.user.somevalue"));
-        	// fuer disable account benoetigt
-        	//request.getSession(true).removeAttribute("shibboleth.user.somevalue");
-        	//log.debug("shibboleth.user.somevalue = " + request.getSession(true).getAttribute("shibboleth.user.somevalue"));
         	log.debug(err.getMessage());
             req.getPortletSession(true).setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
-        	// zum testen der Fehlermeldung-Ausgabe
-        	//req.getPortletSession(true).setAttribute("shibboleth.account.disabled", "true");
-            err.printStackTrace();
+        	err.printStackTrace();
         } catch (AuthenticationException err) {
             log.debug(err.getMessage());
             req.getPortletSession(true).setAttribute(LOGIN_ERROR_FLAG, err.getMessage());
@@ -218,17 +177,12 @@ public class ShibbolethLoginPortlet extends ActionPortlet {
      */
     protected void login(ActionFormEvent event) throws AuthenticationException, AuthorizationException {
     	
-    	log.debug(">>>>>>>>>>>>>>>>>>>>> in ShibbolethLoginPortlet : login(ActionFormEvent)");
-    	
         ActionRequest req = event.getActionRequest();
         ActionResponse res = event.getActionResponse();
         
-
         User user = null;
 		user = login(req);
-		
-		
-		log.debug(">>>>>>>>>>>>>>>>>>>>>>>>> Hole user von login(PortletRequest) User =" + user.getFullName());
+				
         Long now = Calendar.getInstance().getTime().getTime();
         user.setLastLoginTime(now);
         Integer numLogins = user.getNumLogins();
@@ -240,10 +194,7 @@ public class ShibbolethLoginPortlet extends ActionPortlet {
         user.setAttribute(PortalConfigService.LOGIN_NUMTRIES, "0");
 
         userManagerService.saveUser(user);
-        log.debug(">>>>>>>>>>>>>>>>>>>>>> Speichere User");
-        //req.setAttribute(SportletProperties.PORTLET_USER, user);
-        //req.getPortletSession(true).setAttribute(SportletProperties.PORTLET_USER, user.getID(), PortletSession.APPLICATION_SCOPE);
-
+        
         String query = event.getAction().getParameter("queryString");
         log.debug(">>>>>>>>>>>>>>>>>>>>>> queryString = " + event.getAction().getParameter("queryString"));
         if (query != null) {
@@ -294,87 +245,28 @@ public class ShibbolethLoginPortlet extends ActionPortlet {
 	
 	
 	/*
-	 *  login(PortletRequest request) holt die von Shibboleth gesendeten Attribute aus der PortletSession und ueberprueft sie.
-	 *  Wenn noch kein user mit diesem username existiert wird er angelegt. Alle Attribute werden gespeichert.
-	 *  SportletProperties.PORTLET_USER wird im PortletRequest und der Portlet Session gesetzt.
-	 *  Im PortletRequest wird das Attributr "shibboleth.login.redirect" auf "true" gesetzt
-	 *  In der Portlet Session wird das Attribute "shibboleth.login" auf "true" gesetzt
+	 *  login(PortletRequest request) reads the attributes from the HttpServletRequest.
+	 *  If a user with the given username doesn't exists a new one is created.The
+	 *  Shibboleth attributes are stored in the Database.
 	 * 
 	 */
 	
     public User login(PortletRequest request) 
     	throws AuthenticationException, AuthorizationException {
-		log.debug(">>>>>>>>>>>> in ShibbolethLoginPortlet : login(PortletRequest)");
+		
 		User accountRequest = null;
 		ShibbolethUser accountRequestShib = null;
 		
 		HttpServletRequest req = (HttpServletRequest) request;
-		//testen start
-		/*String shib_cn = (String) req.getAttribute("Shib-cn");
-    	String shib_surname = (String) req.getAttribute("Shib-surname");
-    	String shib_givenname = (String) req.getAttribute("Shib-givenName");
-    	String shib_ep_affiliation = (String) req.getAttribute("Shib-EP-Affiliation");
-    	String shib_mail = (String) req.getAttribute("Shib-mail");
-    	String shib_role = (String) req.getAttribute("Shib-role");
-    	String test_var = (String) req.getAttribute("Test-Var");
-    	log.debug("\n\n\n\nAttribute vom Apache");
-    	log.debug("Shib-cn = " + shib_cn);
-    	log.debug("Shib-surname = " + shib_surname);
-    	log.debug("Shib-givenName = " + shib_givenname);
-    	log.debug("Shib-EP-Affiliation = " + shib_ep_affiliation);
-    	log.debug("Shib-mail = " + shib_mail);
-    	log.debug("Shib-role = " + shib_role + "\n\n\n\n");
-    	log.debug("Test-Var = " + test_var);*/
-		//testen ende
-		
-		//log.debug("\n\nPortletRequest : shibboleth.user.attributes = " + request.getPortletSession().getAttribute("shibboleth.user.attributes") + "\n\n");
-		//log.debug("\n\nPortletRequest getPortletSession(true): shibboleth.user.attributes = " + request.getPortletSession(true).getAttribute("shibboleth.user.attributes") + "\n\n");
-		//request.getPortletSession(true).removeAttribute("shibboleth.user.attributes");
-						
-		/*String username = (String) request.getPortletSession(true).getAttribute("shibboleth.user.username");
-		String firstname = (String) request.getPortletSession(true).getAttribute("shibboleth.user.givenname");
-		String lastname = (String) request.getPortletSession(true).getAttribute("shibboleth.user.surname");
-		String email = (String) request.getPortletSession(true).getAttribute("shibboleth.user.email");
-		String org = (String) request.getPortletSession(true).getAttribute("shibboleth.user.organization");
-		String role = (String) request.getPortletSession(true).getAttribute("shibboleth.user.role");
-		String idp = (String) request.getPortletSession(true).getAttribute("shibboleth.user.idp");*/
 		
 		String username = (String) req.getAttribute("Shib-cn");
 		String firstname = (String) req.getAttribute("Shib-givenName");
 		String lastname = (String) req.getAttribute("Shib-surname");
 		String email = (String) req.getAttribute("Shib-mail");
 		String role = (String) req.getAttribute("Shib-role");
-		String eppn = (String) req.getAttribute("Shib-eppn");
-		String sessionID = (String) req.getAttribute("Shib-Session-ID");
-		String identityProvider = (String) req.getAttribute("Shib-Identity-Provider");
-		String epAffiliation = (String) req.getAttribute("Shib-EP-Affiliation");
-		String epUnscopedAffiliation = (String) req.getAttribute("Shib-EP-UnscopedAffiliation");
-		String samlAssertionURL = (String) req.getAttribute("Shib-Assertion-01");
-		String samlAssertionURL2 = (String) req.getAttribute("Shib-Assertion-02");
-		String samlAssertionCount = (String) req.getAttribute("Shib-Assertion-Count");
-		String appId = (String) req.getAttribute("Shib-Application-ID");
-		String authInstant = (String) req.getAttribute("Shib-Authentication-Instant");
-		String authContext = (String) req.getAttribute("Shib-AuthnContext-Decl");
 		String org = null;
 		
-		log.debug("\n\n\n\nAttribute vom Apache mod_jk");
-    	log.debug("Shib-cn = " + username);
-    	log.debug("Shib-givenName = " + firstname);
-    	log.debug("Shib-surname = " + lastname);
-    	log.debug("Shib-mail = " + email);
-    	log.debug("Shib-role = " + role);
-    	log.debug("Shib-eppn = " + eppn);
-    	log.debug("Shib-Session-ID = " + sessionID);
-    	log.debug("Shib-Identity-Provider = " + identityProvider);
-    	log.debug("Shib-EP-Affiliation = " + epAffiliation);
-    	log.debug("Shib-EP-UnscopedAffiliation = " + epUnscopedAffiliation);
-    	log.debug("Shib-Assertion-01 = " + samlAssertionURL);
-    	log.debug("Shib-Assertion-02 = " + samlAssertionURL2);
-    	log.debug("Shib-Assertion-Count = " + samlAssertionCount);
-    	log.debug("Shib-Application-Count = " + appId);
-    	log.debug("Shib-Authentication-Instant = "+ authInstant);
-    	log.debug("Shib-AuthnContext-Decl = " + authContext);
-    		
+			
 		if ( (username == null) || username.equals("") ) 
 			throw new IllegalArgumentException("Please provide a User Name");
 		if ( (firstname == null) || firstname.equals("") ) 
@@ -390,20 +282,15 @@ public class ShibbolethLoginPortlet extends ActionPortlet {
 			role = "USER";
 		else if ( !role.toLowerCase().equals("admin") )
 			role = "USER";
-		//role = "ADMIN";
-		
+				
 		String passwd = "" + username.hashCode() + (new Date()).getTime();
-		//String passwd = "123456";
 		
 		username = email;
-		
-		
-		
+			
 		try {
-			log.debug("\n\n\n\n >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> FEHLERSUCHE ANFANG!!!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< \n\n\n\n");
 			accountRequest = userManagerService.getUserByUserName(username);
 			accountRequestShib = shibService.getShibUserByUserName(username);
-			// wenn user nicht existiert
+			// if user doesn't exists, create a new one
 			if ( accountRequest == null ) {
 				log.debug("NEUEN BENUTZER ANLEGEN! \n");
 				accountRequest = userManagerService.createUser();
@@ -417,60 +304,42 @@ public class ShibbolethLoginPortlet extends ActionPortlet {
 				accountRequestShib.setShibUsername(username);
 				accountRequestShib.setShibEmail(email);
 			}
-			log.debug("Neusetzen der Attribute firstname, lastname, fullname, organization.");
-			log.debug("FirstName vor Neusetzen: "+accountRequest.getFirstName());
+			
 			accountRequest.setFirstName(firstname);
 			accountRequestShib.setShibFirstname(firstname);
-			log.debug("FirstName nach Neusetzen: "+accountRequest.getFirstName());
-			log.debug("LastName vor Neusetzen: "+accountRequest.getLastName());
 			accountRequest.setLastName(lastname);
 			accountRequestShib.setShibLastname(lastname);
-			log.debug("LastName nach Neusetzen: "+accountRequest.getLastName());
-			log.debug("Fullname vor Neusetzen: "+accountRequest.getFullName());
 			accountRequest.setFullName(lastname + ", " + firstname);
-			log.debug("Fullname nach Neusetzen: "+accountRequest.getFullName());
 			accountRequest.setOrganization(org);
-			
-			accountRequestShib.setShibAttr1(epAffiliation);
 			accountRequestShib.setShibCN(username);
 			
 			shibService.saveShibUser(accountRequestShib);
-			log.debug("\n\n\n\nShibboleth user = \n" + accountRequestShib);
-			
+					
 			PasswordEditor editor = passwordManagerService.editPassword(accountRequest);
-			log.debug("password: "+passwd);
+			
 			editor.setValue(passwd);
-			
-			
+						
 			passwordManagerService.savePassword(editor);
 			
-			log.debug("password: "+passwordManagerService.getPassword(accountRequest));
-			
-			log.debug("user object vor saveUser: "+accountRequest.getEmailAddress());
 			
 			userManagerService.saveUser(accountRequest);
 
-			log.debug("user object nach saveUser u. getUserByName(): "+userManagerService.getUserByUserName(email));
-			
 			roleManagerService.addUserToRole(accountRequest, new PortletRole(role));
 			if ( role.toLowerCase().equals("admin"))
 				roleManagerService.addUserToRole(accountRequest, new PortletRole("USER"));
 			
 			
 			request.setAttribute(SportletProperties.PORTLET_USER, accountRequest);
-			log.debug(SportletProperties.PORTLET_USER+": "+request.getAttribute(SportletProperties.PORTLET_USER));
-			request.getPortletSession(true).setAttribute(SportletProperties.PORTLET_USER, accountRequest.getID(), PortletSession.APPLICATION_SCOPE);
-			log.debug(SportletProperties.PORTLET_USER+": "+request.getPortletSession(true).getAttribute(SportletProperties.PORTLET_USER));
-			request.setAttribute("shibboleth.login.redirect", "true");
-			log.debug("request.setAttribute('shibboleth.login.redirect', 'true'): "+request.getAttribute("shibboleth.login.redirect"));
-			request.getPortletSession(true).setAttribute("shibboleth.login", "true", PortletSession.APPLICATION_SCOPE);
-			log.debug("PortletSession request.setAttribute('shibboleth.login', 'true'): "+request.getPortletSession(true).getAttribute("shibboleth.login"));
 			
+			request.getPortletSession(true).setAttribute(SportletProperties.PORTLET_USER, accountRequest.getID(), PortletSession.APPLICATION_SCOPE);
+			request.setAttribute("shibboleth.login.redirect", "true");
+			
+			request.getPortletSession(true).setAttribute("shibboleth.login", "true", PortletSession.APPLICATION_SCOPE);
+						
 			req.getSession(true).setAttribute("shibboleth.user.somevalue", "true");
 			
 		} catch (Exception e) {
-			log.error(this.getClass().getSimpleName()+".login(..) threw exception blabala");
-			//pm.endTransaction();
+			log.error(this.getClass().getSimpleName()+".login(..) threw exception");
 			e.printStackTrace();
 		}
 		

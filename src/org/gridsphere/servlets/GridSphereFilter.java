@@ -87,8 +87,6 @@ public class GridSphereFilter implements Filter {
                 int idx = release.lastIndexOf(" ");
                 String gsversion = release.substring(idx + 1);
 
-                //System.err.println("gsversion=" + gsversion);
-
                 String dbpath = settingsService.getRealSettingsPath("/database/GS_" + gsversion);
 
                 File dbfile = new File(dbpath);
@@ -195,10 +193,7 @@ public class GridSphereFilter implements Filter {
             StringBuffer requestURL = req.getRequestURL();
             String requestURI = req.getRequestURI();
             String query = req.getQueryString();
-            log.info("\ncontext path = " + req.getContextPath() + " servlet path=" + req.getServletPath());
-            log.info("\n pathInfo= " + pathInfo + " query= " + query);
-            log.info(" requestURL= " + requestURL + " requestURI= " + requestURI + "\n");
-
+            
             String extraInfo = "";
 
             // use the servlet path to determine where to forward
@@ -270,7 +265,6 @@ public class GridSphereFilter implements Filter {
             }
 
             //chain.doFilter(request, response);
-
 
             String ctxPath = "/gs";
 

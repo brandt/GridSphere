@@ -341,6 +341,7 @@ public class UserManagerPortlet extends ActionPortlet {
                     this.roleManagerService.deleteUserInRole(user, role);
                 }
                 this.userManagerService.deleteUser(user);
+                // delete ShibbolethUser from ShibbolethUser table in DB
                 ShibbolethUser shibUser = this.shibUserService.getShibUserByUserName(user.getUserID());
                 this.shibUserService.deleteShibUser(shibUser);
             }

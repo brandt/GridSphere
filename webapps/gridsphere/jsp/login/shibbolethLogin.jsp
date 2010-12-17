@@ -6,24 +6,18 @@
 
 <%
 	String shib_flag = (String)request.getAttribute("shibboleth.login.enabled");
-	
+	String shib_SP = (String)request.getAttribute("shibboleth.sp");
 	if((shib_flag != null) && (shib_flag.equals("true")))
 	{
-		String account_disabled = (String)request.getAttribute("shibboleth.account.disabled");
-		if((account_disabled != null) && (account_disabled.equals("true"))) 
-		{
+		if (shib_SP.equals("")) {
 %>
 			<ui:form>
-				<ui:messagebox value="Account disabled by GridSphere Administrator"/>			
-		    	<ui:actionsubmit cssStyle="margin-right: 30px;" action="obtainSAMLAttributes" key="Login from Shibboleth" />
+				<ui:messagebox value="No Service Provider available"/>
 			</ui:form>
 <%
-		}
-		else
-		{
+		} else {
 %>
 			<ui:form>
-				
 				<ui:actionsubmit cssStyle="margin-right: 30px;" action="obtainSAMLAttributes" key="Login from Shibboleth" />
 			</ui:form>
 <%
@@ -32,10 +26,10 @@
 	else
 	{
 %>
-		<ui:form>
-			<ui:messagebox value="Login from Shibboleth is not allowed by GridSphere administrator"/>
-		</ui:form>
-		
+			<ui:form>
+				<ui:messagebox value="Login from Shibboleth is not allowed by GridSphere administrator"/>
+			</ui:form>
 <%
+
 	}
 %>
