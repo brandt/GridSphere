@@ -1,5 +1,10 @@
 RELEASE NOTES
 
+Gridsphere 3.2
+==============
+
+GridSphere now supports single sign-on with Shibboleth and x.509 certificates
+
 GridSphere 3.1
 ==============
 

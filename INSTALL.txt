@@ -48,7 +48,7 @@ docs -- builds the Javadoc documentation from the source code
 To see all the targets invoke "ant --projecthelp".
 
 2) Read the documentation found at  
-http://www.gridsphere.org/gridsphere/gridsphere?cid=docs
+http://docs.gridsphere.org/dashboard.action
 for more information on using and developing portlets with  GridSphere.
 
 3) Startup Tomcat and then go to http://127.0.0.1:8080/gridsphere/gridsphere

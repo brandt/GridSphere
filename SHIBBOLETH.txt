@@ -52,6 +52,8 @@ Requirements:
 Java 1.6 and Tomcat 5/6
 
 Installation:
-Prior to installation enter Shibboleth Service Provider  in webapps/gridsphere/Shibboleth.properties (e.g. host.dns=shib2-sp.aei.mpg.de)
-Install as usual using ant install.
+Prior to installation enter Shibboleth Service Provider  in webapps/gridsphere/Shibboleth.properties (e.g. host.dns=shib2-sp.aei.mpg.de).
+You can change it later in the Tomcat webapps/gridsphere directory, but don't forget to restart Tomcat.
+Install GridSphere as usual using ant install.
+In the Administration Tab of GridSphere the ShibbolethAuthModule can be enabled/disabled.
 
