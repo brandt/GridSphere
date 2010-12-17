@@ -1,4 +1,7 @@
-Configuration GridSphere and Shibboleth
+# ***************************************
+#        GridSphere and Shibboleth
+# ***************************************
+
 
 For Tomcat and Apache to be able to communicate module mod_jk has to be installed.
 (see http://tomcat.apache.org/connectors-doc/webserver_howto/apache.html)
